@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedHelp.DBase", "MedHelp.DB
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MedHelp.Core", "MedHelp.Core\MedHelp.Core.csproj", "{4AB1294F-402F-4396-99C1-D77BE24511B6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FillingTheDb", "Заполнение таблицы\FillingTheDb.csproj", "{36425D13-5ADE-4F45-801A-599659C833D9}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
