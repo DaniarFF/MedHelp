@@ -396,7 +396,3 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
-
-/_Drugs__202409261105.csv
-/temp/MedHelp.DBase.rar
-/MedHelp.DBase/Migrations/DbCommands.txt
