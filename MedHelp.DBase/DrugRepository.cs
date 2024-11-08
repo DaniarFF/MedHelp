@@ -1,40 +1,49 @@
 ﻿using MedHelp.Core.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using static iText.IO.Util.IntHashtable;
 
 namespace MedHelp.DBase
 {
   public class DrugRepository : IDrugRepository
   {
-
     private readonly AppDbContext appDbContex;
-    private readonly ILogger logger;
 
-    public DrugRepository(AppDbContext applicationDbContex, ILogger<DrugRepository> logger)
+    public IQueryable<DrugEntity> GetAll()
     {
-      appDbContex = applicationDbContex;
-      this.logger = logger;
-    }
-
-    public async Task<IQueryable<DrugEntity>> Get(string drugName)
-    {
-      var query = appDbContex.Drugs.Where(x => x.Name == drugName);
+      var query = appDbContex.Drugs.AsQueryable();
 
       return query;
     }
-    public async Task<IQueryable<DrugEntity>> GetAll()
-    {
-      try
-      {
-        var query = appDbContex.Drugs.Include(x => x.DrugGroup).Include(x => x.DiseaseDrugs);
 
-        return query;
-      }
-      catch (Exception ex)
-      {
-        Console.WriteLine(ex.Message);
-        throw;
-      }
+    public async Task Add(DrugEntity drugEntity)
+    {
+      if (drugEntity == null) return;
+
+      appDbContex.Drugs.Add(drugEntity);
+      await appDbContex.SaveChangesAsync();
+    }
+    
+    public async Task Update(DrugEntity drugEntity)
+    {
+      if (drugEntity == null) return;
+
+      appDbContex.Drugs.Update(drugEntity);
+      await appDbContex.SaveChangesAsync();
+    }
+
+    public async Task Delete(int id)
+    {
+      var drugEntity = await appDbContex.Drugs.FindAsync(id);
+      if (drugEntity == null) return;
+
+      appDbContex.Drugs.Remove(drugEntity);
+      await appDbContex.SaveChangesAsync();
+    }
+
+    public DrugRepository(AppDbContext applicationDbContex)
+    {
+      appDbContex = applicationDbContex;
     }
   }
 }

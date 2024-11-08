@@ -32,5 +32,4 @@ namespace MedHelp.Core.Models
     /// </summary>
     public IEnumerable<Drug> TreatmentDrugs { get; set; }
   }
-
 }

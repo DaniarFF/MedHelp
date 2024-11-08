@@ -16,13 +16,26 @@ namespace MedHelp.Core.Abstractions
     /// Получает все препараты.
     /// </summary>
     /// <returns>Список всех существующих препаратов.</returns>
-    Task<IEnumerable<Drug>> GetAll();
+    IEnumerable<Drug> GetAll();
 
     /// <summary>
     /// Получает препарат по названию препарата.
     /// </summary>
     /// <param name="drugName">Название препарата</param>
-    /// <returns>Возвращает <see cref="Drug"/>.</returns>
-    Task<Drug> Get(string drugName);
+    /// <returns>Возвращает <see cref="Drug"/></returns>
+    Drug Get(string drugName);
+
+    /// <summary>
+    /// Добавляет препарат.
+    /// </summary>
+    /// <param name="drug">Препарат</param>
+    /// <returns></returns>
+    Task Add(Drug drug);
+
+    /// <summary>
+    /// Удаляет препарат.
+    /// </summary>
+    /// <returns></returns>
+    Task Delete(int id);
   }
 }

@@ -120,7 +120,6 @@ namespace MedHelp
           {
             Name = name,
             TelegramId = update.Message.Chat.Id,
-            TelegramUserName = update.Message.Chat.Username,
           };
 
           await userService.Add(userToAdd);
@@ -290,7 +289,7 @@ namespace MedHelp
 
       int groupNum = (int)group;
 
-      var drugs = (await drugService.GetAll()).Where(d => d.GroupId == groupNum);
+      var drugs = drugService.GetAll().Where(d => d.GroupId == groupNum);
 
       string msg = "Выберете препарат";
 
@@ -329,7 +328,7 @@ namespace MedHelp
 
       update.RegisterStepHandler(new StepTelegram(StartMakeRecipe));
 
-      var drug = await drugService.Get(update.Message.Text);
+      var drug = drugService.Get(update.Message.Text);
 
       var currentDrugs = update.GetCacheData<BotCache>().Drugs;
 
@@ -364,7 +363,7 @@ namespace MedHelp
     public async Task GetRecipe(ITelegramBotClient botClient, Update update)
     {
       using var scope = serviceScopeFactory.CreateScope();
-      var pdfService = scope.ServiceProvider.GetRequiredService<CreatePDFService>();
+      var pdfService = scope.ServiceProvider.GetRequiredService<DocumentService>();
       var userService = scope.ServiceProvider.GetService<IUserService>();
 
       var cache = update.GetCacheData<BotCache>();
@@ -379,10 +378,10 @@ namespace MedHelp
       };
 
       //TODO Сделать свою уникальную дозировку под каждое заболевание
-      pdfService.CreatePDF(pDFDocument);
+      pdfService.CreatePDFFile(pDFDocument);
 
-      await using Stream stream = System.IO.File.OpenRead("example.pdf");
-      var message = await botClient.SendDocumentAsync(update.GetChatId(), document: InputFile.FromStream(stream, "example.pdf"),
+      await using Stream stream = System.IO.File.OpenRead("recipe.pdf");
+      var message = await botClient.SendDocumentAsync(update.GetChatId(), document: InputFile.FromStream(stream, "recipe.pdf"),
           caption: "Рецепт");
     } 
     #endregion

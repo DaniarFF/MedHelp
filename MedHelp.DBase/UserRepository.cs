@@ -7,20 +7,11 @@ namespace MedHelp.DBase
   public class UserRepository : IUserRepository
   {
     private readonly AppDbContext appDbContex;
-    private readonly ILogger<UserRepository> logger;
 
     public async Task Add(UserEntity entity)
     {
-      try
-      {
-        await appDbContex.Users.AddAsync(entity);
-        await appDbContex.SaveChangesAsync();
-      }
-      catch (Exception ex)
-      {
-        Console.WriteLine(ex.Message);
-        throw;
-      }
+      await appDbContex.Users.AddAsync(entity);
+      await appDbContex.SaveChangesAsync();
     }
 
     public async Task<UserEntity> Get(long tgId)
@@ -28,26 +19,21 @@ namespace MedHelp.DBase
       return await appDbContex.Users.FirstOrDefaultAsync(x => x.TelegramId == tgId);
     }
 
-
     public async Task<UserEntity> Update(UserEntity entity)
     {
-      try
-      {
-        appDbContex.Users.Update(entity);
-        await appDbContex.SaveChangesAsync();
-        return entity;
-      }
-      catch (Exception ex)
-      {
-        logger.LogError(ex, "Ошибка обновления информации пользователя");
-        throw;
-      }
+      appDbContex.Users.Update(entity);
+      await appDbContex.SaveChangesAsync();
+      return entity;
     }
 
-    public UserRepository(AppDbContext appDbContex, ILogger<UserRepository> logger)
+    public Task Delete(UserEntity entity)
+    {
+      throw new NotImplementedException();
+    }
+
+    public UserRepository(AppDbContext appDbContex)
     {
       this.appDbContex = appDbContex;
-      this.logger = logger;
     }
   }
 }

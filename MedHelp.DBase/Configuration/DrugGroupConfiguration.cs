@@ -11,7 +11,7 @@ namespace MedHelp.DBase.Configuration
     public void Configure(EntityTypeBuilder<DrugGroupEntity> builder)
     {
       builder.Property(gd => gd.Id).IsRequired();
-      builder.Property(gd => gd.Name).IsRequired();    
+      builder.Property(gd => gd.Name).IsRequired().HasMaxLength(50);    
     }
   }
 }

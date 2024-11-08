@@ -15,10 +15,10 @@ namespace MedHelp.Core.Abstractions
     Task Add(User user);
 
     /// <summary>
-    /// Получить пользователя по идентификатору акканта в телеграмм.
+    /// Получить пользователя по идентификатору аккаунта в телеграмм.
     /// </summary>
-    /// <param name="tgId"></param>
+    /// <param name="telegramId">Идентификатор аккаунта телеграм</param>
     /// <returns></returns>
-    Task<User> Get(long tgId);
+    Task<User> Get(long telegramId);
   }
 }

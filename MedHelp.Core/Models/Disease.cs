@@ -35,6 +35,6 @@ namespace MedHelp.Core.Models
     /// <summary>
     /// Список лекарств, рекомендуемых для лечения заболевания.
     /// </summary>
-    public List<Drug> Treatment { get; set; }
+    public IEnumerable<Drug> Treatment { get; set; }
   }
 }

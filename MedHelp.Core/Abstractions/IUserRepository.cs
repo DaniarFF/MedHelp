@@ -10,9 +10,9 @@ namespace MedHelp.DBase
     /// <summary>
     /// Получить пользователя по идентификатору аккаунта в телеграмм.
     /// </summary>
-    /// <param name="tgId"></param>
+    /// <param name="telegramId">Идентификатор аккаунта телеграм</param>
     /// <returns><see cref="UserEntity"/></returns>
-    Task<UserEntity> Get(long tgId);
+    Task<UserEntity> Get(long telegramId);
 
     /// <summary>
     /// Добавить пользователя.
@@ -26,5 +26,12 @@ namespace MedHelp.DBase
     /// <param name="entity"></param>
     /// <returns>Измененного пользователя <see cref="UserEntity"/></returns>
     Task<UserEntity> Update(UserEntity entity);
+    
+    /// <summary>
+    /// Удалить пользователя.
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <returns></returns>
+    Task Delete(UserEntity entity); 
   }
 }

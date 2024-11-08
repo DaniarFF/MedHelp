@@ -23,11 +23,6 @@ namespace MedHelp.Core.Models
     public string Name { get; set; }
 
     /// <summary>
-    /// Имя пользователя в Telegram.
-    /// </summary>
-    public string TelegramUserName { get; set; }
-
-    /// <summary>
     /// Уникальный идентификатор пользователя в Telegram.
     /// </summary>
     public long TelegramId { get; set; }
@@ -37,5 +32,4 @@ namespace MedHelp.Core.Models
     /// </summary>
     public IEnumerable<TreatmentTemplate> TreatmentTemplates { get; set; }
   }
-
 }

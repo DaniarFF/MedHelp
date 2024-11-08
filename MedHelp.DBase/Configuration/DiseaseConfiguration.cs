@@ -11,10 +11,10 @@ namespace MedHelp.DBase.Configuration
     public void Configure(EntityTypeBuilder<DiseaseEntity> builder)
     {
       builder.Property(d => d.Id).IsRequired();
-      builder.Property(d => d.Name).IsRequired();
+      builder.Property(d => d.Name).IsRequired().HasMaxLength(50);
       builder.Property(d => d.Symptoms).HasMaxLength(500).IsRequired();
       builder.Property(d => d.Recomendations).HasMaxLength(500).IsRequired(false);
-      builder.Property(d => d.DistinctiveSigns).IsRequired(false);
+      builder.Property(d => d.DistinctiveSigns).IsRequired(false).HasMaxLength(500);
       builder.HasMany(d => d.DiseaseDrugs).WithOne(dd => dd.Disease).HasForeignKey(dd => dd.DiseaseId);
       builder.HasMany(d => d.TreatmentTemplates).WithOne(tt => tt.Disease).HasForeignKey(tt => tt.DiseaseId);
     }

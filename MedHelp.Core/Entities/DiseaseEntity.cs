@@ -40,5 +40,4 @@
     /// </summary>
     public ICollection<TreatmentTemplateEntity> TreatmentTemplates { get; set; }
   }
-
 }

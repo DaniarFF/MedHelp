@@ -11,9 +11,9 @@ namespace MedHelp.DBase
     /// <summary>
     /// Получить все шаблоны лечения пользователя.
     /// </summary>
-    /// <param name="user"></param>
+    /// <param name="userId">Идентефикатор пользователя.</param>
     /// <returns><see cref="TreatmentTemplateEntity"/></returns>
-    Task<TreatmentTemplateEntity> Get(User user);
+    Task<IQueryable<TreatmentTemplateEntity>> Get(int userId);
 
     /// <summary>
     /// Получить все существующие шаблоны.

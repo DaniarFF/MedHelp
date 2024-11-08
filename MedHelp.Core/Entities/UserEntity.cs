@@ -22,11 +22,6 @@ namespace MedHelp.Core.Entities
     public string Name { get; set; }
 
     /// <summary>
-    /// Имя пользователя в Telegram.
-    /// </summary>
-    public string TelegramUserName { get; set; }
-
-    /// <summary>
     /// Уникальный идентификатор пользователя в Telegram.
     /// </summary>
     public long TelegramId { get; set; }
@@ -36,5 +31,4 @@ namespace MedHelp.Core.Entities
     /// </summary>
     public IEnumerable<TreatmentTemplateEntity> TreatmentTemplates { get; set; }
   }
-
 }

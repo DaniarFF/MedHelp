@@ -9,41 +9,39 @@ namespace MedHelp.Core.Services
   public class UserService : IUserService
   {
     private readonly IUserRepository userRepository;
-    private readonly ILogger logger;
 
     public async Task<User> Get(long tgId)
     {
-      User user = new User();
-
       var userEntity = await userRepository.Get(tgId);
 
       if (userEntity != null)
       {
-        user.Id = userEntity.Id;
-        user.Name = userEntity.Name;
-        user.TelegramId = userEntity.TelegramId;
-        user.TelegramUserName = userEntity.TelegramUserName;  
+        User user = new User() 
+        { 
+        Id = userEntity.Id,
+        Name = userEntity.Name,
+        TelegramId = userEntity.TelegramId,        
+        };
+        return user;
       };
 
-      return user;
+      return null;
     }
 
-  public async Task Add(User user)
-  {
-    UserEntity entity = new UserEntity()
+    public async Task Add(User user)
     {
-      Name = user.Name,
-      TelegramId = user.TelegramId,
-      TelegramUserName = user.TelegramUserName,
-    };
+      UserEntity entity = new UserEntity()
+      {
+        Name = user.Name,
+        TelegramId = user.TelegramId,
+      };
 
-    await userRepository.Add(entity);
-  }
+      await userRepository.Add(entity);
+    }
 
-  public UserService(IUserRepository userRepository, ILogger<UserService> logger)
-  {
-    this.userRepository = userRepository;
-    this.logger = logger;
+    public UserService(IUserRepository userRepository)
+    {
+      this.userRepository = userRepository;
+    }
   }
-}
 }

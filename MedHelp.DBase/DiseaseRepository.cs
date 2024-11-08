@@ -7,37 +7,42 @@ namespace MedHelp.DBase
   public class DiseaseRepository : IDiseaseRepository
   {
     private readonly AppDbContext appDbContex;
-    private readonly ILogger logger;
 
-    public DiseaseRepository(AppDbContext applicationDbContex, ILogger<DiseaseRepository> logger)
+    public DiseaseRepository(AppDbContext applicationDbContex)
     {
       appDbContex = applicationDbContex;
-      this.logger = logger;
     }
 
-    public async Task<DiseaseEntity> Get(string drugName)
+    public IQueryable<DiseaseEntity> GetAll()
     {
-      var query = appDbContex.Diseases
-        .Include(dd => dd.DiseaseDrugs)
-        .ThenInclude(dd => dd.Drug)
-        .FirstOrDefault(x => x.Name == drugName);
+      var query = appDbContex.Diseases.Include(x => x.DiseaseDrugs);
 
       return query;
     }
 
-    public async Task<IQueryable<DiseaseEntity>> GetAll()
+    public async Task Add(DiseaseEntity entity)
     {
-      try
-      {
-        var query = appDbContex.Diseases.Include(x => x.DiseaseDrugs);
+      if (entity == null) return;
 
-        return query;
-      }
-      catch (Exception ex)
-      {
-        Console.WriteLine(ex.Message);
-        throw;
-      }
+      appDbContex.Diseases.Add(entity);
+      await appDbContex.SaveChangesAsync();
+    }
+
+    public async Task Update(DiseaseEntity entity)
+    {
+      if (entity == null) return;
+
+      appDbContex.Diseases.Update(entity);
+      await appDbContex.SaveChangesAsync();
+    }
+
+    public async Task Delete(int id)
+    {
+      var disease = await appDbContex.Diseases.FindAsync(id);
+      if (disease == null) return;
+
+      appDbContex.Diseases.Remove(disease);
+      await appDbContex.SaveChangesAsync();
     }
   }
 }

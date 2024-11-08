@@ -5,13 +5,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace MedHelp.DBase
 {
+  /// <summary>
+  ///   Контекст для работы с БД PostgreSQL.
+  /// </summary>
   public class AppDbContext : DbContext
   {
-    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-    {
-
-    }
-
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
       base.OnModelCreating(modelBuilder);
@@ -31,6 +29,11 @@ namespace MedHelp.DBase
     public DbSet<TreatmentTemplateDrugEntity> TreatmentsTemplatesDrugs { get; set; }
     public DbSet<TreatmentTemplateEntity> TreatmentsTemplates { get; set; }
     public DbSet<UserEntity> Users { get; set; }
-    public DbSet<DrugGroupEntity> DrugsGroups { get; set; }  
+    public DbSet<DrugGroupEntity> DrugsGroups { get; set; }
+
+    public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
+    {
+
+    }
   }
 }

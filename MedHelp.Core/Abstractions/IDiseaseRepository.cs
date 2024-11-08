@@ -8,16 +8,30 @@ namespace MedHelp.DBase
   public interface IDiseaseRepository
   {
     /// <summary>
-    /// Получить обьект болезни по названию.
-    /// </summary>
-    /// <param name="diseaseName"></param>
-    /// <returns><see cref="DiseaseEntity"/></returns>
-    Task<DiseaseEntity> Get(string diseaseName);
-
-    /// <summary>
     /// Получить все обьекты болезней.
     /// </summary>
-    /// <returns>Коллекцию <see cref="DiseaseEntity"/> </returns>
-    Task<IQueryable<DiseaseEntity>> GetAll();
+    /// <returns>Коллекцию <see cref="DiseaseEntity"/></returns>
+    IQueryable<DiseaseEntity> GetAll();
+    
+    /// <summary>
+    /// Добавить новую болезнь.
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <returns></returns>
+    Task Add(DiseaseEntity entity); 
+    
+    /// <summary>
+    /// Обновить информацию о болезни.
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <returns></returns>
+    Task Update(DiseaseEntity entity); 
+    
+    /// <summary>
+    /// Удалить болезнь.
+    /// </summary>
+    /// <param name="entity"></param>
+    /// <returns></returns>
+    Task Delete(int id);  
   }
 }

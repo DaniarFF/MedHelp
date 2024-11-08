@@ -10,7 +10,7 @@ namespace MedHelp.Core.Entities
   /// <summary>
   /// Представляет связь между <see cref="DrugEntity"/> и <see cref="DiseaseEntity"/>
   /// </summary>
-  public class DiseaseDrugEntity
+  public class DiseaseDrug
   {
     /// <summary>
     /// Идентификатор связи
@@ -25,7 +25,7 @@ namespace MedHelp.Core.Entities
     /// <summary>
     /// Заболевание.
     /// </summary>
-    public DiseaseEntity Disease { get; set; }
+    public Disease Disease { get; set; }
 
     /// <summary>
     /// Идентификатор препарата 
@@ -35,7 +35,7 @@ namespace MedHelp.Core.Entities
     /// <summary>
     /// Препарат.
     /// </summary>
-    public DrugEntity Drug { get; set; }
+    public Drug Drug { get; set; }
 
     /// <summary>
     /// Особые указания по применению лекарственного препарата в контексте данного заболевания.

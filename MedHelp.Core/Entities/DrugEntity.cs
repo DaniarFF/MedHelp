@@ -28,7 +28,7 @@
     /// <summary>
     /// Коллекция связей между заболеваниями и лекарствами.
     /// </summary>
-    public ICollection<DiseaseDrugEntity> DiseaseDrugs { get; set; }
+    public IQueryable<DiseaseDrugEntity> DiseaseDrugs { get; set; }
 
     /// <summary>
     /// Идентификатор группы препаратов, к которой относится данный препарат.

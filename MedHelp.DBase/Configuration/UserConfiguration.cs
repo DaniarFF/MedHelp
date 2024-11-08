@@ -12,7 +12,6 @@ namespace MedHelp.DBase.Configuration
     {
       builder.Property(u => u.Id).IsRequired();
       builder.Property(u => u.Name).HasMaxLength(50);
-      builder.Property(u => u.TelegramUserName).HasMaxLength(50).IsRequired();
       builder.Property(u => u.TelegramId).IsRequired();
     }
   }
