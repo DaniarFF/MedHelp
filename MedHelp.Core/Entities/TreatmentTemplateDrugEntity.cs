@@ -1,7 +1,7 @@
 ﻿namespace MedHelp.Core.Entities
 {
   /// <summary>
-  /// Представляет связь между шаблоном лечения и лекарственным препаратом.
+  /// Связь между шаблоном лечения и лекарственным препаратом.
   /// </summary>
   public class TreatmentTemplateDrugEntity
   {

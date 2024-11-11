@@ -16,19 +16,19 @@ namespace MedHelp.DBase
       return query;
     }
 
-    public async Task Add(DrugEntity drugEntity)
+    public async Task Add(DrugEntity drug)
     {
-      if (drugEntity == null) return;
+      if (drug == null) return;
 
-      appDbContex.Drugs.Add(drugEntity);
+      appDbContex.Drugs.Add(drug);
       await appDbContex.SaveChangesAsync();
     }
     
-    public async Task Update(DrugEntity drugEntity)
+    public async Task Update(DrugEntity drug)
     {
-      if (drugEntity == null) return;
+      if (drug == null) return;
 
-      appDbContex.Drugs.Update(drugEntity);
+      appDbContex.Drugs.Update(drug);
       await appDbContex.SaveChangesAsync();
     }
 

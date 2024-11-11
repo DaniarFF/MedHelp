@@ -14,9 +14,9 @@ namespace MedHelp.DBase
       await appDbContex.SaveChangesAsync();
     }
 
-    public async Task<UserEntity> Get(long tgId)
+    public async Task<UserEntity> Get(long telegramId)
     {
-      return await appDbContex.Users.FirstOrDefaultAsync(x => x.TelegramId == tgId);
+      return await appDbContex.Users.FirstOrDefaultAsync(x => x.TelegramId == telegramId);
     }
 
     public async Task<UserEntity> Update(UserEntity entity)
@@ -26,9 +26,13 @@ namespace MedHelp.DBase
       return entity;
     }
 
-    public Task Delete(UserEntity entity)
+    public async Task Delete(int id)
     {
-      throw new NotImplementedException();
+      var user = await appDbContex.Users.FindAsync(id);
+      if (user == null) return;
+
+      appDbContex.Users.Remove(user);
+      await appDbContex.SaveChangesAsync();
     }
 
     public UserRepository(AppDbContext appDbContex)

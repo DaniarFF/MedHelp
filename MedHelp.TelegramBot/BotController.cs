@@ -15,14 +15,14 @@ using System.Text;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.ReplyMarkups;
+using Message = PRTelegramBot.Helpers.Message;
 
 namespace MedHelp
 {
   [BotHandler]
   public class BotController
   {
-    private readonly ILogger<BotController> _logger;
-    private readonly IDrugService drugService;
+    private readonly ILogger<BotController> logger;
     private readonly IServiceScopeFactory serviceScopeFactory;
 
     /// <summary>
@@ -56,6 +56,13 @@ namespace MedHelp
       DropsInTheEar,
       ForTheThroat
     }
+    
+    [InlineCommand]
+    public enum ProfileMenu
+    {
+      Profile = 700,
+      TreatmentTemplates,
+    }
 
     #region Диагностика заболевания
 
@@ -87,13 +94,13 @@ namespace MedHelp
         else
         {
           update.RegisterStepHandler(new StepTelegram(DiagnosisStepTwo, new BotCache() { DoctorName = existingUser.Name }));
-          string msg = "Введите симтомы в формате: Температура 37 кашель насморк сыпь";
+          string msg = "Введите симптомы в формате: Температура 37 кашель насморк сыпь";
           await PRTelegramBot.Helpers.Message.Send(botClient, update, msg);
         }
       }
       catch (Exception ex)
       {
-        _logger.LogError(ex, "Ошибка при выполнении /diagnosis", ex.Message);
+        logger.LogError(ex, "Ошибка при выполнении /diagnosis", ex.Message);
       }
     }
 
@@ -135,7 +142,7 @@ namespace MedHelp
       }
       catch (Exception ex)
       {
-        _logger.LogError(ex, "Ошибка регистрации пользователя", ex.Message);
+        logger.LogError(ex, "Ошибка регистрации пользователя", ex.Message);
       }
     }
 
@@ -363,7 +370,7 @@ namespace MedHelp
     public async Task GetRecipe(ITelegramBotClient botClient, Update update)
     {
       using var scope = serviceScopeFactory.CreateScope();
-      var pdfService = scope.ServiceProvider.GetRequiredService<DocumentService>();
+      var pdfService = scope.ServiceProvider.GetRequiredService<IDocumentService>();
       var userService = scope.ServiceProvider.GetService<IUserService>();
 
       var cache = update.GetCacheData<BotCache>();
@@ -386,11 +393,60 @@ namespace MedHelp
     } 
     #endregion
 
+    #region Профиль
+
+    public async Task ProfileStartStep(ITelegramBotClient botClient, Update update)
+    {     
+      try
+      {
+        update.CreateCacheData<BotCache>();
+
+        using var scope = serviceScopeFactory.CreateScope(); 
+        var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
+
+        var currentUser = await userService.Get(update.Message.Chat.Id);
+
+        if (currentUser.TelegramId == 0)
+        {
+          update.RegisterStepHandler(new StepTelegram(UserRegistration));
+          string msg = "Напишите ваше имя в формате Фамилия И.О.";
+          await Message.Send(botClient, update, msg);
+        }
+        else
+        {
+          var inlineButtonOne = new InlineCallback("Профиль", ProfileMenu.Profile); 
+          var inlineButtonTwo = new InlineCallback("Шаблоны лечения", ProfileMenu.TreatmentTemplates); 
+
+          List<IInlineContent> menu = new()
+          {
+            inlineButtonOne,
+            inlineButtonTwo
+          };
+
+          var inlineMenu = MenuGenerator.InlineKeyboard(1, menu);
+
+          var option = new OptionMessage();
+          option.MenuInlineKeyboardMarkup = inlineMenu;
+
+          var cache = update.GetCacheData<BotCache>();
+
+          var msg = $"{currentUser.Name}, выберите пункт меню"; 
+
+          await Message.Send(botClient, update, msg , option);
+        }
+      }
+      catch (Exception ex)
+      {
+        logger.LogError(ex, "Ошибка при выполнении /profile", ex.Message);
+      }
+    }
+
+    #endregion
 
     #region Конструктор
     public BotController(ILogger<BotController> logger, IServiceScopeFactory serviceScopeFactory)
     {
-      _logger = logger;
+      this.logger = logger;
       this.serviceScopeFactory = serviceScopeFactory;
     } 
     #endregion

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace MedHelp.Core.Entities
 {
   /// <summary>
-  /// Представляет связь между <see cref="DrugEntity"/> и <see cref="DiseaseEntity"/>
+  /// Cвязь между <see cref="DrugEntity"/> и <see cref="DiseaseEntity"/>
   /// </summary>
   public class DiseaseDrugEntity
   {

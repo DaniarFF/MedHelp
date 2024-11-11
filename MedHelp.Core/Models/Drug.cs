@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace MedHelp.Core.Models
 {
   /// <summary>
-  /// Представляет лекарственное средство с его характеристиками.
+  /// Лекарственное средство с его характеристиками.
   /// </summary>
   public class Drug
   {

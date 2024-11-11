@@ -1,7 +1,7 @@
 ﻿namespace MedHelp.Core.Entities
 {
   /// <summary>
-  /// Представляет шаблон лечения, связанный с конкретным заболеванием и пользователем.
+  /// Шаблон лечения, связанный с конкретным заболеванием и пользователем.
   /// </summary>
   public class TreatmentTemplateEntity
   {

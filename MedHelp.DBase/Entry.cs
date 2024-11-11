@@ -13,8 +13,6 @@ namespace MedHelp.DBase
   /// </summary>
   public static class Entry
   {
-    private static readonly Action<DbContextOptionsBuilder> DefaultOptionsAction = (_) => { };
-
     /// <summary>
     /// Добавления зависимостей для работы с БД
     /// </summary>
@@ -24,7 +22,7 @@ namespace MedHelp.DBase
     public static IServiceCollection AddPostgreSqlStorage(this IServiceCollection serviceCollection,
         Action<DbContextOptionsBuilder> optionsAction)
     {
-      serviceCollection.AddDbContext<AppDbContext>(optionsAction ?? DefaultOptionsAction);
+      serviceCollection.AddDbContext<AppDbContext>(optionsAction);
       serviceCollection.AddScoped<IDiseaseRepository, DiseaseRepository>();
       serviceCollection.AddScoped<IDrugRepository, DrugRepository>();
       serviceCollection.AddScoped<IUserRepository, UserRepository>();

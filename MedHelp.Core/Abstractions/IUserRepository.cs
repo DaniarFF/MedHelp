@@ -30,8 +30,8 @@ namespace MedHelp.DBase
     /// <summary>
     /// Удалить пользователя.
     /// </summary>
-    /// <param name="entity"></param>
+    /// <param name= "id"></param>
     /// <returns></returns>
-    Task Delete(UserEntity entity); 
+    Task Delete(int id); 
   }
 }

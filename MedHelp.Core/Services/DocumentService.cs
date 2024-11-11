@@ -6,6 +6,7 @@ using iText.Kernel.Pdf;
 using iText.Layout;
 using iText.Layout.Element;
 using iText.Layout.Properties;
+using MedHelp.Core.Abstractions;
 using MedHelp.Core.Models;
 
 namespace MedHelp.Core.Services
@@ -13,7 +14,7 @@ namespace MedHelp.Core.Services
   /// <summary>
   /// Сервис для формирования и создания PDF документа.
   /// </summary>
-  public class DocumentService
+  public class DocumentService : IDocumentService
   {
     public static readonly string dest = "recipe.pdf";
 
@@ -38,7 +39,7 @@ namespace MedHelp.Core.Services
     /// <summary>
     /// Заполнение и формирование PDF файла.
     /// </summary>
-    private void FillDocument(PdfDocument pdfDoc, iText.Layout.Document doc, MedicalDocument pDFDocument) 
+    public void FillDocument(PdfDocument pdfDoc, iText.Layout.Document doc, MedicalDocument pDFDocument) 
     {
       //Шрифт необходим для правильного отображения кириллицы.
 

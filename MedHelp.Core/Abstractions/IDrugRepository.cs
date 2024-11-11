@@ -16,8 +16,8 @@ namespace MedHelp.DBase
     /// <summary>
     /// Добавить препарат.
     /// </summary>
-    /// <param name="drugEntity"></param>
-    Task Add(DrugEntity drugEntity);
+    /// <param name="drug"></param>
+    Task Add(DrugEntity drug);
 
     /// <summary>
     /// Удалить препарат.
@@ -27,6 +27,6 @@ namespace MedHelp.DBase
     /// <summary>
     ///  Изменить препарат.
     /// </summary>
-    Task Update(DrugEntity drugEntity);
+    Task Update(DrugEntity drug);
   }
 }

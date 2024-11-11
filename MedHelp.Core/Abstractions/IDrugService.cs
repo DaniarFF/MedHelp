@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace MedHelp.Core.Abstractions
 {
   /// <summary>
-  /// Cервис для получения препаратов
+  /// Сервис для получения препаратов
   /// </summary>
   public interface IDrugService
   {

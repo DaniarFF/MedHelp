@@ -23,7 +23,7 @@ namespace MedHelp.Core
       serviceCollection.AddScoped<IDrugService, DrugService>();
       serviceCollection.AddScoped<IUserService, UserService>();
       serviceCollection.AddScoped<IDiseaseService, DiseaseService>();
-      serviceCollection.AddScoped<DocumentService>();
+      serviceCollection.AddScoped<IDocumentService, DocumentService>();
 
       return serviceCollection;
     }

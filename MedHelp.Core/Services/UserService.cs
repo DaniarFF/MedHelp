@@ -10,21 +10,21 @@ namespace MedHelp.Core.Services
   {
     private readonly IUserRepository userRepository;
 
-    public async Task<User> Get(long tgId)
+    public async Task<User> Get(long telegramId)
     {
-      var userEntity = await userRepository.Get(tgId);
+      var userEntity = await userRepository.Get(telegramId);
 
       if (userEntity != null)
       {
-        User user = new User() 
-        { 
-        Id = userEntity.Id,
-        Name = userEntity.Name,
-        TelegramId = userEntity.TelegramId,        
+        User user = new User()
+        {
+          Id = userEntity.Id,
+          Name = userEntity.Name,
+          TelegramId = userEntity.TelegramId,
         };
         return user;
-      };
-
+      }
+      
       return null;
     }
 

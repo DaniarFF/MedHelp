@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace MedHelp.Core.Entities
 {
   /// <summary>
-  /// Представляет сущность пользователя.
+  /// Сущность пользователя.
   /// </summary>
   public class UserEntity
   {

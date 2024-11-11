@@ -3,7 +3,7 @@
 namespace MedHelp.Core.Entities
 {
   /// <summary>
-  /// Представляет группу лекарственных препаратов.
+  /// Группа лекарственных препаратов.
   /// </summary>
   public class DrugGroupEntity
   {

@@ -1,7 +1,7 @@
 ﻿namespace MedHelp.Core.Entities
 {
   /// <summary>
-  /// Представляет сущность заболевания, содержащую информацию о симптомах, рекомендациях и отличительных признаках.
+  /// Cущность заболевания, содержащую информацию о симптомах, рекомендациях и отличительных признаках.
   /// </summary>
   public class DiseaseEntity
   {
@@ -38,6 +38,6 @@
     /// <summary>
     /// Коллекция шаблонов лечения, связанных с данным заболеванием.
     /// </summary>
-    public ICollection<TreatmentTemplateEntity> TreatmentTemplates { get; set; }
+    public IEnumerable<TreatmentTemplateEntity> TreatmentTemplates { get; set; }
   }
 }

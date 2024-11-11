@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace MedHelp.Core.Models
 {
   /// <summary>
-  /// Представляет пользователя.
+  /// Пользователь.
   /// </summary>
   public class User
   {

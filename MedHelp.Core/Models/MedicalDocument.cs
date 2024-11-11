@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace MedHelp.Core.Models
 {
   // <summary>
-  /// Представляет медицинский документ (рецепт) с информацией о пациенте и списком назначенных лекарств.
+  /// Медицинский документ (рецепт) с информацией о пациенте и списком назначенных лекарств.
   /// </summary>
   public class MedicalDocument
   {
