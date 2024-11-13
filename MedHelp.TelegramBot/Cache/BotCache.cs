@@ -14,6 +14,7 @@ namespace MedHelp.TelegramBot.Cache
   public class BotCache : ITelegramCache
   {
     public long Id { get; set; }
+    public int UserId { get; set; }
     public string DoctorName { get; set; }
     public List<Disease> Diseases {  get; set; } 
     public List<Drug> Drugs { get; set; }
@@ -22,6 +23,7 @@ namespace MedHelp.TelegramBot.Cache
     public bool ClearData()
     {
       Id = 0;
+      UserId = 0; 
       OtherData = string.Empty;
       Diseases = new List<Disease>();
       DoctorName = string.Empty;

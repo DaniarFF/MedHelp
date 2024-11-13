@@ -26,6 +26,7 @@ namespace MedHelp.DBase
       serviceCollection.AddScoped<IDiseaseRepository, DiseaseRepository>();
       serviceCollection.AddScoped<IDrugRepository, DrugRepository>();
       serviceCollection.AddScoped<IUserRepository, UserRepository>();
+      serviceCollection.AddScoped<ITreatmentTemplateRepository, TreatmentTemplateRepository>();
 
       return serviceCollection;
     }

@@ -2,46 +2,58 @@
 using MedHelp.Core.Entities;
 using MedHelp.Core.Models;
 using MedHelp.DBase;
-using Microsoft.Extensions.Logging;
 
-namespace MedHelp.Core.Services
+namespace MedHelp.Core.Services;
+
+public class UserService : IUserService
 {
-  public class UserService : IUserService
+  private readonly IUserRepository userRepository;
+
+  public UserService(IUserRepository userRepository)
   {
-    private readonly IUserRepository userRepository;
+    this.userRepository = userRepository;
+  }
 
-    public async Task<User> Get(long telegramId)
+  public async Task<User> Get(long telegramId)
+  {
+    var userEntity = await userRepository.Get(telegramId);
+
+    if (userEntity != null)
     {
-      var userEntity = await userRepository.Get(telegramId);
-
-      if (userEntity != null)
+      var user = new User
       {
-        User user = new User()
-        {
-          Id = userEntity.Id,
-          Name = userEntity.Name,
-          TelegramId = userEntity.TelegramId,
-        };
-        return user;
-      }
-      
-      return null;
-    }
-
-    public async Task Add(User user)
-    {
-      UserEntity entity = new UserEntity()
-      {
-        Name = user.Name,
-        TelegramId = user.TelegramId,
+        Id = userEntity.Id,
+        Name = userEntity.Name,
+        TelegramId = userEntity.TelegramId,
+        TelegramUserName = userEntity.TelegramUserName
       };
-
-      await userRepository.Add(entity);
+      return user;
     }
 
-    public UserService(IUserRepository userRepository)
+    return null;
+  }
+
+  public async Task Update(User user)
+  {
+    var userEntity = new UserEntity
     {
-      this.userRepository = userRepository;
-    }
+      Name = user.Name,
+      TelegramId = user.TelegramId,
+      TelegramUserName = user.TelegramUserName
+    };
+
+    await userRepository.Update(userEntity);
+  }
+
+  public async Task Add(User user)
+  {
+    var entity = new UserEntity
+    {
+      Name = user.Name,
+      TelegramId = user.TelegramId,
+      TelegramUserName = user.TelegramUserName
+    };
+
+    await userRepository.Add(entity);
   }
 }

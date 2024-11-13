@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MedHelp.Core.Entities;
 
 namespace MedHelp.Core
 {
@@ -23,6 +24,7 @@ namespace MedHelp.Core
       serviceCollection.AddScoped<IDrugService, DrugService>();
       serviceCollection.AddScoped<IUserService, UserService>();
       serviceCollection.AddScoped<IDiseaseService, DiseaseService>();
+      serviceCollection.AddScoped<TreatmentTemplateService>();
       serviceCollection.AddScoped<IDocumentService, DocumentService>();
 
       return serviceCollection;

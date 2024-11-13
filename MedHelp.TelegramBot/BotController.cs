@@ -62,8 +62,49 @@ namespace MedHelp
     {
       Profile = 700,
       TreatmentTemplates,
+      UpdateProfile,
     }
+    
+    [ReplyMenuHandler("/start","/menu", "Главное меню")]
+    public async Task StartFirstStep(ITelegramBotClient botClient, Update update)
+    {     
+      try
+      {
+        using var scope = serviceScopeFactory.CreateScope();
+        var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
 
+        var existingUser = await userService.Get(update.Message.Chat.Id);
+
+        if (existingUser.TelegramId == 0)
+        {
+          update.RegisterStepHandler(new StepTelegram(UserRegistration));
+          string msg = "Похоже вы до этого не пользовались ботом!\n Напишите ваше имя в формате Фамилия И.О." +
+                       "\n (нужно для формирования рецептурных бланков)";
+          await PRTelegramBot.Helpers.Message.Send(botClient, update, msg);
+        }
+        else
+        {
+          string msg = "Выберете пункт меню.";
+          var option = new OptionMessage();
+          var menuList = new List<KeyboardButton>();
+          
+          menuList.Add(new KeyboardButton("Диагностика заболевания \U0001FA7A"));
+          menuList.Add(new KeyboardButton("Найти препарат по названию \U0001F489"));
+          menuList.Add(new KeyboardButton("Сформировать рецепт \U0001F48A"));
+          menuList.Add(new KeyboardButton("Мой профиль \U0001F468"));
+          
+          var menu = MenuGenerator.ReplyKeyboard(2, menuList, true);
+
+          option.MenuReplyKeyboardMarkup = menu;
+          await PRTelegramBot.Helpers.Message.Send(botClient, update, msg, option);
+        }
+      }
+      catch (Exception ex)
+      {
+        logger.LogError(ex, "Ошибка при выполнении /start", ex.Message);
+      }
+    }
+    
     #region Диагностика заболевания
 
     /// <summary>
@@ -73,7 +114,7 @@ namespace MedHelp
     /// <param name="botClient">Экземпляр <see cref="ITelegramBotClient"/></param>
     /// <param name="update">Действие с ботом</param>
     /// <returns></returns>
-    [ReplyMenuHandler("/diagnosis")]
+    [ReplyMenuHandler("/diagnosis", "Диагностика заболевания \U0001FA7A")]
     public async Task DiagnosisStartStep(ITelegramBotClient botClient, Update update)
     {     
       try
@@ -127,6 +168,7 @@ namespace MedHelp
           {
             Name = name,
             TelegramId = update.Message.Chat.Id,
+            TelegramUserName = update.Message.From.Username
           };
 
           await userService.Add(userToAdd);
@@ -136,7 +178,7 @@ namespace MedHelp
           var cache = update.GetCacheData<BotCache>();
 
           handler?.RegisterNextStep(DiagnosisStepTwo);
-          string msg = "Введите симтомы в формате: Температура 37 кашель насморк сыпь";
+          string msg = "Введите симптомы в формате: Температура 37 кашель насморк сыпь";
           await PRTelegramBot.Helpers.Message.Send(botClient, update, msg);
         }
       }
@@ -153,7 +195,7 @@ namespace MedHelp
     public async Task DiagnosisStepTwo(ITelegramBotClient botClient, Update update)
     {
       using var scope = serviceScopeFactory.CreateScope();
-      var diseaseService = scope.ServiceProvider.GetRequiredService<DiseaseService>();
+      var diseaseService = scope.ServiceProvider.GetRequiredService<IDiseaseService>();
 
       var handler = update.GetStepHandler<StepTelegram>();
 
@@ -169,7 +211,7 @@ namespace MedHelp
         if (closestDeseases.Count == 0)
         {
           await PRTelegramBot.Helpers.Message.Send(botClient, update,
-            $"Не удалось найти болезнь с такими странными симптомами");
+            $"Слишком мало данных или не удалось найти болезнь с такими странными симптомами");
           return;
         }
         if (closestDeseases.Count == 1)
@@ -200,7 +242,7 @@ namespace MedHelp
 
         var cache = update.GetCacheData<BotCache>();
 
-        await PRTelegramBot.Helpers.Message.Send(botClient, update, msg, option);
+        await Message.Send(botClient, update, msg, option);
       }
     }
 
@@ -239,6 +281,7 @@ namespace MedHelp
     /// </summary>
     /// <returns></returns>
     [InlineCallbackHandler<InlineCommands>(InlineCommands.StartMakingRecipe)]
+    [ReplyMenuHandler("Сформировать рецепт \U0001F48A")]
     public async Task StartMakeRecipe(ITelegramBotClient botClient, Update update)
     {
       var option = new OptionMessage();
@@ -353,9 +396,9 @@ namespace MedHelp
       }
 
       var option = new OptionMessage();
-      var menuList = new List<KeyboardButton>() { "Продолжить выбор" };
+      var menuList = new List<KeyboardButton>() { "Продолжить выбор", "Закончить выбор" };
 
-      var menu = MenuGenerator.ReplyKeyboard(1, menuList, true, "Закончить выбор");
+      var menu = MenuGenerator.ReplyKeyboard(1, menuList, true, "Главное меню");
       option.MenuReplyKeyboardMarkup = menu;
 
       await PRTelegramBot.Helpers.Message.Send(botClient, update, $"Выбраны препараты: {sb}", option);
@@ -395,6 +438,7 @@ namespace MedHelp
 
     #region Профиль
 
+    [ReplyMenuHandler("/profile", "Мой профиль \U0001F468")]
     public async Task ProfileStartStep(ITelegramBotClient botClient, Update update)
     {     
       try
@@ -405,6 +449,7 @@ namespace MedHelp
         var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
 
         var currentUser = await userService.Get(update.Message.Chat.Id);
+        update.GetCacheData<BotCache>().UserId = currentUser.Id;
 
         if (currentUser.TelegramId == 0)
         {
@@ -414,7 +459,7 @@ namespace MedHelp
         }
         else
         {
-          var inlineButtonOne = new InlineCallback("Профиль", ProfileMenu.Profile); 
+          var inlineButtonOne = new InlineCallback("Изменить имя", ProfileMenu.Profile); 
           var inlineButtonTwo = new InlineCallback("Шаблоны лечения", ProfileMenu.TreatmentTemplates); 
 
           List<IInlineContent> menu = new()
@@ -428,7 +473,7 @@ namespace MedHelp
           var option = new OptionMessage();
           option.MenuInlineKeyboardMarkup = inlineMenu;
 
-          var cache = update.GetCacheData<BotCache>();
+          update.GetCacheData<BotCache>().DoctorName = currentUser.Name;  
 
           var msg = $"{currentUser.Name}, выберите пункт меню"; 
 
@@ -439,6 +484,66 @@ namespace MedHelp
       {
         logger.LogError(ex, "Ошибка при выполнении /profile", ex.Message);
       }
+    }
+    
+    [InlineCallbackHandler<ProfileMenu>(ProfileMenu.Profile)]  
+    public async Task ShowProfile(ITelegramBotClient botClient, Update update)
+    {
+      update.RegisterStepHandler(new StepTelegram(UserNameUpdate));
+      var msg = $"Напишите ваше имя в формате Фамилия И.О."; 
+      await Message.Send(botClient, update, msg);
+    }
+
+    public async Task UserNameUpdate(ITelegramBotClient botClient, Update update)
+    {
+      try
+      {
+        using var scope = serviceScopeFactory.CreateScope();
+        var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
+        string name = update.Message.Text;
+
+        if (name != null)
+        {
+          Core.Models.User userToUpdate = new Core.Models.User
+          {
+            Name = name,
+            TelegramId = update.Message.Chat.Id,
+            TelegramUserName = update.Message.Chat.Username,  
+          };
+
+          await userService.Update(userToUpdate);
+        }
+      }
+      catch (Exception ex)
+      {
+        logger.LogError(ex, "Ошибка при выполнении UserNameUpdate", ex.Message);
+      }
+    }
+    
+    [InlineCallbackHandler<ProfileMenu>(ProfileMenu.TreatmentTemplates)]  
+    public async Task ShowTemplates(ITelegramBotClient botClient, Update update)
+    {
+      using var scope = serviceScopeFactory.CreateScope(); 
+      var templateService = scope.ServiceProvider.GetRequiredService<TreatmentTemplateService>();
+      
+      var userId = update.GetCacheData<BotCache>().UserId; 
+      
+      var templates = templateService.GetTemplatesByUserId(userId);
+
+      string msg =  "У вас нет сохраненных шаблонов лечения.";
+      if (templates.Any())
+      {
+        var sb = new StringBuilder();
+        var i = 1; 
+        foreach (var template in templates)
+        {
+          sb.AppendLine($"{i}. {template.TemplateName}");
+        }
+        
+        msg = $"Выберите шаблон лечения:\n {sb}";
+      }
+     
+      await Message.Send(botClient, update, msg);
     }
 
     #endregion

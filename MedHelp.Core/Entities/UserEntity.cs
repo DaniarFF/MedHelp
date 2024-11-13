@@ -25,6 +25,11 @@ namespace MedHelp.Core.Entities
     /// Уникальный идентификатор пользователя в Telegram.
     /// </summary>
     public long TelegramId { get; set; }
+    
+    /// <summary>
+    ///  Логин пользователя в телеграм.
+    /// </summary>
+    public string TelegramUserName { get; set; }
 
     /// <summary>
     /// Коллекция шаблонов лечения, созданных пользователем.
