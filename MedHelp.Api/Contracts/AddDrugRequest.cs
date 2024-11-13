@@ -1,15 +1,17 @@
-﻿namespace MedHelp.Api.Contracts;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace MedHelp.Api.Contracts;
 
 /// <summary>
 ///   Запрос на добавление нового лекарства
 /// </summary>
 public class AddDrugRequest
 {
-  public string Name { get; set; }
+  [Required] public string Name { get; set; }
 
-  public string Recipe { get; set; }
+  [Required] public string Recipe { get; set; }
 
-  public string RlsLink { get; set; }
+  [Url] public string RlsLink { get; set; }
 
-  public int? GroupId { get; set; }
+  [Range(600, 610)] public int? GroupId { get; set; }
 }

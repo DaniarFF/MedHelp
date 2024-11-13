@@ -29,7 +29,7 @@ public class DiseasesController : ControllerBase
     return Ok(response);
   }
 
-  [HttpPost("add")]
+  [HttpPost]
   public async Task<IActionResult> AddDrug([FromBody] AddDiseaseRequest request)
   {
     var newDisease = new Disease
@@ -44,19 +44,18 @@ public class DiseasesController : ControllerBase
     return Ok();
   }
 
-  [HttpPost("delete")]
-  public async Task<IActionResult> DeleteDrug([FromBody] DeleteByIdRequest request)
+  [HttpDelete("{id}")]
+  public async Task<IActionResult> DeleteDrug([FromRoute] int id)
   {
-    await diseaseService.Delete(request.Id);
+    await diseaseService.Delete(id);
     return Ok();
   }
 
-  [HttpPost("update")]
+  [HttpPut]
   public async Task<IActionResult> UpdateDrug([FromBody] AddDiseaseRequest request)
   {
     var disease = new Disease
     {
-      Id = request.Id,
       Name = request.Name,
       Symptoms = request.Symptoms,
       Recomendations = request.Recomendations,
