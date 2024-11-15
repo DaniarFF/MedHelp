@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using PRTelegramBot.Core;
 using PRTelegramBot.Extensions;
 using PRTelegramBot.Models.EventsArgs;
+using MedHelp.Api;
 
 namespace MedHelp
 {

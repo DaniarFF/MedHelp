@@ -75,7 +75,7 @@ namespace MedHelp
 
         var existingUser = await userService.Get(update.Message.Chat.Id);
 
-        if (existingUser.TelegramId == 0)
+        if (existingUser  == null)
         {
           update.RegisterStepHandler(new StepTelegram(UserRegistration));
           string msg = "Похоже вы до этого не пользовались ботом!\n Напишите ваше имя в формате Фамилия И.О." +
@@ -155,12 +155,10 @@ namespace MedHelp
     {
       try
       {
-        //Обработчик пошагового выполнения команд
-        var handler = update.GetStepHandler<StepTelegram>();
-
         using var scope = serviceScopeFactory.CreateScope();
         var userService = scope.ServiceProvider.GetRequiredService<IUserService>();
         string name = update.Message.Text;
+        update.GetCacheData<BotCache>().DoctorName = update.Message.Text;
 
         if (name != null)
         {
@@ -173,11 +171,10 @@ namespace MedHelp
 
           await userService.Add(userToAdd);
 
-          handler!.GetCache<BotCache>().DoctorName = update.Message.Text;
-
           var cache = update.GetCacheData<BotCache>();
+          
+          update.RegisterStepHandler(new StepTelegram(DiagnosisStepTwo));
 
-          handler?.RegisterNextStep(DiagnosisStepTwo);
           string msg = "Введите симптомы в формате: Температура 37 кашель насморк сыпь";
           await PRTelegramBot.Helpers.Message.Send(botClient, update, msg);
         }
