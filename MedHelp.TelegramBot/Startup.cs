@@ -31,7 +31,8 @@ namespace MedHelp.TelegramBot
 
       services.AddScopedBotHandlers();
       services.AddLogging();
-      services.AddControllers();
+      services.AddControllers()
+        .AddApi();
       services.AddPostgreSqlStorage(options =>
       {
         options.UseNpgsql(config.GetConnectionString("ConnectionString"));
